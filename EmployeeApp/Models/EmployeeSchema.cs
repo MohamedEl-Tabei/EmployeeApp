@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using EmployeeApp.Models.Departments;
-namespace EmployeeApp.Models.Employees
+namespace EmployeeApp.Models
 {
     [Table("Employee")]
     public partial class Employee
@@ -9,14 +8,14 @@ namespace EmployeeApp.Models.Employees
         #region Employee Id
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name ="Employee Id")]
+        [Display(Name = "Employee Id")]
         public int EmployeeId { get; set; }
         #endregion
         #region Employee Name
         [Required]
-        [StringLength(maximumLength:50,MinimumLength =10)]
-        [Display(Name ="Employee Name")]
-        [Column(TypeName ="VARCHAR(50)")]
+        [StringLength(maximumLength: 50, MinimumLength = 10)]
+        [Display(Name = "Employee Name")]
+        [Column(TypeName = "VARCHAR(50)")]
         public string EmployeeName { get; set; }
         #endregion
         #region Employee Number
@@ -29,7 +28,7 @@ namespace EmployeeApp.Models.Employees
         #region Employee Date Of Birth
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name ="Date Of Birth")]
+        [Display(Name = "Date Of Birth")]
         public DateOnly DateOfBirth { get; set; }
         #endregion
         #region Employee Date Of Joining
@@ -42,7 +41,7 @@ namespace EmployeeApp.Models.Employees
         [Required]
         [DataType(DataType.Currency)]
         [Display(Name = "Employee Gross Salary")]
-        [Column(TypeName ="DECIMAL(12,2)")]
+        [Column(TypeName = "DECIMAL(12,2)")]
         public decimal EmployeeGrossSalary { get; set; }
         #endregion
         #region Employee Net Salary
@@ -60,5 +59,11 @@ namespace EmployeeApp.Models.Employees
         #region Department
         public virtual Department Department { get; set; }
         #endregion
+        public Employee()
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            DateOfBirth=today;
+            DateOfJoining=today;
+        }
     }
 }

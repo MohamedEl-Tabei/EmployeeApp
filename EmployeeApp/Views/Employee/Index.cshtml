@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Employee>
+@{
+    ViewData["Title"] = "Employees";
+    var properties = new string[] { 
+    "Number",
+    "Name",
+    "Date Of Birth",
+    "Date Of Joining",
+    "Salary",
+    "Department",""
+    };
+    string fieldStyle = "text-center";
+}
+<table class="table">
+    <thead>
+        @foreach(var property in properties)
+        {
+            <th class=@fieldStyle>@property</th>
+        }
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td class=@fieldStyle>@i.EmployeeNumber </td>
+                <td class=@fieldStyle>@i.EmployeeName</td>
+                <td class=@fieldStyle>@i.DateOfBirth.ToString("dd MMMM yyyy")</td>
+                <td class=@fieldStyle>@i.DateOfJoining.ToString("dd-MM-yyyy")</td>
+                <td class=@fieldStyle>@i.EmployeeNetSalary</td>
+                <td class=@fieldStyle>@Department.findNameById(i.DepartmentId)</td>
+                <td class=@fieldStyle>@Html.ActionLink("Edit","Edit",new {num=i.EmployeeNumber})</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
