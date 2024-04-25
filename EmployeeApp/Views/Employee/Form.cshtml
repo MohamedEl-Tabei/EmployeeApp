@@ -1,10 +1,11 @@
 ﻿@model Employee
 @{
-    string title = Model.EmployeeName == null ? "Create" : "Edit";
+    string title = Model.EmployeeName == null || ViewBag.hasErrors!=null ? "Create" : "Edit";
     ViewData["Title"] = title;
     string elementStyle = "col-md-6";
+    string validationSummeryStyle = ViewBag.hasErrors == true? "background:#0000004d;display:flex;":"display:none";
 }
-<form class="row w-75 m-auto g-3   pb-2">
+<form class="row w-75 m-auto g-3 pb-2" asp-action=@title>
     <h3 class="text-center m-auto shadow p-3 mb-2 rounded-3">@title Employee @Model.EmployeeNumber</h3>
 
     <div class=@elementStyle>
@@ -17,13 +18,8 @@
     </div>
     <div class=@elementStyle>
         <label asp-for=DepartmentId class="form-label">Department</label>
-        <select asp-for="DepartmentId" class="form-select">
-            <option disabled selected value=@null />
-
-            @foreach (var department in ViewBag.Departments)
-            {
-                <option value=@department.DepartmentId>@department.DepartmentName</option>
-            }
+        <select  asp-for=DepartmentId class="form-select" asp-items="@(new SelectList(ViewBag.Departments,"DepartmentId","DepartmentName"))" >
+            <option disabled selected  value=@null />
         </select>
     </div>
     <div class=@elementStyle>
@@ -32,7 +28,7 @@
     </div>
     <div class=@elementStyle>
         <label asp-for=EmployeeGrossSalary class="form-label">Groos salary</label>
-        <input type="number" asp-for=EmployeeNetSalary class="form-control">
+        <input type="number" asp-for=EmployeeGrossSalary class="form-control">
     </div>
     <div class=@elementStyle>
         <label asp-for=EmployeeNetSalary class="form-label">Net salary</label>
@@ -40,10 +36,18 @@
     </div>
     <div class=@elementStyle>
         <div class="mt-5 d-flex justify-content-between">
-            <button class="btn w-50 btn-success me-2">Save</button>
-            <button class="btn w-50 btn-secondary">Cancle</button>
+            <button type="submit" class="btn w-50 btn-success me-2">Save</button>
+            <a type="button" asp-action="Index" class="btn w-50 btn-secondary">Cancle</a>
         </div>
 
     </div>
+    <div  class="modal  justify-content-center align-items-center " id="errorForm" style=@validationSummeryStyle >
+        <div class="bg-danger text-light p-5 rounded-3 position-relative">
+            <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-2" onclick="document.getElementById('errorForm').style.display='none'" ></button>
+            <div asp-validation-summary="All" >
+            </div>
+        </div>
+        
 
+    </div>
 </form>

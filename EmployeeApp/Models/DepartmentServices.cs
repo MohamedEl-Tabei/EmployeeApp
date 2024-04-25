@@ -9,5 +9,6 @@
             string departmentName = departments.FirstOrDefault(department => department.DepartmentId == id).DepartmentName;
             return departmentName;
         }
+        public static Department findDepartmentById(int id) => dbContext.Departments.SingleOrDefault(department => department.DepartmentId == id);
     }
 }

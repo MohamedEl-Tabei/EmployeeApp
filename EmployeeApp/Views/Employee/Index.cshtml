@@ -28,7 +28,7 @@
                 <td class=@fieldStyle>@i.DateOfJoining.ToString("dd-MM-yyyy")</td>
                 <td class=@fieldStyle>@i.EmployeeNetSalary</td>
                 <td class=@fieldStyle>@Department.findNameById(i.DepartmentId)</td>
-                <td class=@fieldStyle>@Html.ActionLink("Edit","Edit",new {num=i.EmployeeNumber})</td>
+                <td class=@fieldStyle>@Html.ActionLink("Edit","Edit",new {num=i.EmployeeNumber} )</td>
             </tr>
 
         }

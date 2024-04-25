@@ -61,6 +61,8 @@ namespace EmployeeApp.Models
         #endregion
         public Employee()
         {
+            
+            EmployeeNumber = "00002";
             var today = DateOnly.FromDateTime(DateTime.Now);
             DateOfBirth=today;
             DateOfJoining=today;
