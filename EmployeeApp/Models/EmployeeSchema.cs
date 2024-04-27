@@ -42,6 +42,7 @@ namespace EmployeeApp.Models
         [DataType(DataType.Currency)]
         [Display(Name = "Employee Gross Salary")]
         [Column(TypeName = "DECIMAL(12,2)")]
+        [Range(1000,100000)]
         public decimal EmployeeGrossSalary { get; set; }
         #endregion
         #region Employee Net Salary
@@ -49,6 +50,8 @@ namespace EmployeeApp.Models
         [DataType(DataType.Currency)]
         [Column(TypeName = "DECIMAL(12,2)")]
         [Display(Name = "Employee Net Salary")]
+        [Range(1000, 100000)]
+
         public decimal EmployeeNetSalary { get; set; }
         #endregion
         #region Department Id

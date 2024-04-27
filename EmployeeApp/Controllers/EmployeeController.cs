@@ -5,33 +5,13 @@ namespace EmployeeApp.Controllers
 {
     public class EmployeeController : Controller
     {
-        static AppDbContext dbContext = new AppDbContext();
         #region Employees Table
-        public IActionResult Index()
-        {
-            //List<Employee> employees = dbContext.Employees.ToList();
-            List<Employee> employees = (from employee in dbContext.Employees
-                                        join department in dbContext.Departments
-                                        on employee.DepartmentId equals department.DepartmentId
-                                        select new Employee
-                                        {
-                                            EmployeeId = employee.EmployeeId,
-                                            EmployeeName = employee.EmployeeName,
-                                            EmployeeGrossSalary = employee.EmployeeGrossSalary,
-                                            EmployeeNetSalary = employee.EmployeeNetSalary,
-                                            EmployeeNumber = employee.EmployeeNumber,
-                                            DateOfBirth = employee.DateOfBirth,
-                                            DateOfJoining = employee.DateOfJoining,
-                                            DepartmentId = department.DepartmentId,
-                                            Department = department,
-                                        }).ToList();
-            return View(employees);
-        }
+        public IActionResult Index()=> View(Employee.GetEmployees());
         #endregion
         #region Create New Employee
         public IActionResult Create()
         {
-            ViewBag.Departments = dbContext.Departments;
+            ViewBag.Departments = Department.GetDepartments();
             var newEmployee = new Employee();
             return View("Form", newEmployee);
         }
@@ -39,15 +19,13 @@ namespace EmployeeApp.Controllers
         public IActionResult Create(Employee newEmployee)
         {
             ModelState.Remove("EmployeeNumber");
-            if (newEmployee.DepartmentId != null && Department.findDepartmentById(newEmployee.DepartmentId) != null) ModelState.Remove("Department");
+            if (newEmployee.DepartmentId != null && Department.FindDepartmentById(newEmployee.DepartmentId) != null) ModelState.Remove("Department");
             if (ModelState.IsValid)
             {
-                newEmployee.generateEmployeeNumber();
-                dbContext.Employees.Add(newEmployee);
-                dbContext.SaveChanges();
+                newEmployee.Create();
                 return RedirectToAction("Index");
             }
-            ViewBag.Departments = dbContext.Departments;
+            ViewBag.Departments = Department.GetDepartments();
             ViewBag.hasErrors = true;
             return View("Form", newEmployee);
         }
@@ -55,21 +33,19 @@ namespace EmployeeApp.Controllers
         #region Edit Employee
         public IActionResult Edit(string num)
         {
-            ViewBag.Departments = dbContext.Departments;
-            return View("Form", Employee.findByNumber(num));
+            ViewBag.Departments = Department.GetDepartments();
+            return View("Form", Employee.FindByNumber(num));
         }
         [HttpPost]
         public IActionResult Edit(Employee employee)
         {
-            //ModelState.Remove("EmployeeNumber");
-            if (employee.DepartmentId != null && Department.findDepartmentById(employee.DepartmentId) != null) ModelState.Remove("Department");
+            if (employee.DepartmentId != null && Department.FindDepartmentById(employee.DepartmentId) != null) ModelState.Remove("Department");
             if (ModelState.IsValid)
             {
-                dbContext.Employees.Update(employee);
-                dbContext.SaveChanges();
+                employee.Update();
                 return RedirectToAction("Index");
             }
-            ViewBag.Departments = dbContext.Departments;
+            ViewBag.Departments = Department.GetDepartments();
             ViewBag.hasErrors = true;
             return View("Form", employee);
         }
@@ -78,28 +54,8 @@ namespace EmployeeApp.Controllers
         #region Delete Employee
         public IActionResult Delete(string num)
         {
-            Employee emp = Employee.findByNumber(num);
-            if(emp!=null)
-            {
-                dbContext.Employees.Remove(emp);
-                dbContext.SaveChanges();
-            }
-            var employees = (from employee in dbContext.Employees
-                             join department in dbContext.Departments on employee.DepartmentId equals department.DepartmentId
-                             select new Employee
-                             {
-                                 Department = department,
-                                 EmployeeId = employee.EmployeeId,
-                                 EmployeeGrossSalary = employee.EmployeeGrossSalary,
-                                 EmployeeName = employee.EmployeeName,
-                                 EmployeeNetSalary = employee.EmployeeNetSalary,
-                                 EmployeeNumber = employee.EmployeeNumber,
-                                 DateOfBirth = employee.DateOfBirth,
-                                 DateOfJoining = employee.DateOfJoining,
-                                 DepartmentId = employee.DepartmentId,
-                             }
-                             ).ToList();
-            return View("Index", employees);
+            Employee.Delete(num);
+            return RedirectToAction("Index");
         }
         #endregion
     }
