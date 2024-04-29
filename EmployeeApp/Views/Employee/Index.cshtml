@@ -10,12 +10,32 @@
     "Department",""
     };
     string fieldStyle = "text-center";
+    string fieldOrderClass = "text-decoration-none text-dark";
+    string fieldOrderSelectedClass = "text-decoration-none text-primary";
 }
 <table class="table table-hover">
     <thead>
         @foreach (var property in properties)
         {
-        <th class=@fieldStyle>@property</th>
+        <th class=@fieldStyle>
+                @Html.ActionLink(property, "Sort", new { orderBy = property, orderDirection = ViewBag.orderBy == property ? ViewBag.orderDirection : "Asc" }, new { @class = ViewBag.orderBy == property ? fieldOrderSelectedClass : fieldOrderClass })
+                @if (ViewBag.orderBy == property)
+                {
+                    if (ViewBag.orderDirection == "Dsc")
+                    {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi text-primary bi-arrow-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1" />
+                    </svg>
+                    }
+                    else
+                    {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up text-primary" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5" />
+                    </svg>
+                    }
+                }
+
+        </th>
         }
     </thead>
     <tbody>
@@ -30,7 +50,7 @@
                 <td class=@fieldStyle>@i.Department.DepartmentName</td>
                 <td class=@fieldStyle>
                     @Html.ActionLink("Edit", "Edit", new { num = i.EmployeeNumber }, new { @class = "btn btn-info text-light me-2", @style = "width:70px" })
-                    @Html.ActionLink("Delete", "Delete", new { num= i.EmployeeNumber }, new { @class = "btn btn-danger", @style="width:70px",onclick=$"return confirm('Do you want to delete {i.EmployeeName}?')"})
+                    @Html.ActionLink("Delete", "Delete", new { num = i.EmployeeNumber }, new { @class = "btn btn-danger", @style = "width:70px", onclick = $"return confirm('Do you want to delete {i.EmployeeName}?')" })
                 </td>
             </tr>
 

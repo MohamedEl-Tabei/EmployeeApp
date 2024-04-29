@@ -8,6 +8,13 @@ namespace EmployeeApp.Controllers
         #region Employees Table
         public IActionResult Index()=> View(Employee.GetEmployees());
         #endregion
+        #region Sort Employees
+        public IActionResult Sort(string orderBy, string orderDirection) {
+            ViewBag.OrderBy = orderBy;
+            ViewBag.OrderDirection = orderDirection=="Asc"?"Dsc":"Asc";
+            return View("Index", Employee.GetEmployeesOrderBy(orderBy, orderDirection));
+        }
+        #endregion
         #region Create New Employee
         public IActionResult Create()
         {
@@ -58,5 +65,6 @@ namespace EmployeeApp.Controllers
             return RedirectToAction("Index");
         }
         #endregion
+
     }
 }
